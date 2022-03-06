@@ -18,7 +18,9 @@ const VerificationRequest = require("../db/models/verificationRequest");
 class StatsController {
   constructor() {
     let verificationConfig = settings.rules.find(
-      (r) => r.name === "Anonymice Verifier"
+      //Forgot about this change as well
+      //(r) => r.name === "Anonymice Verifier"
+      (r) => r.name === "Outliners Verifier for Anonymice"
     );
     this.roleConfiguration = verificationConfig.executor.config.roles;
   }
