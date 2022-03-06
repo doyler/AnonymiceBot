@@ -1,7 +1,8 @@
 /*##############################################################################
-# File: settings.js                                                            #
-# Project: Anonymice - Discord Bot                                             #
-# Author(s): Oliver Renner (@_orenner) & slingn.eth (@slingncrypto)            #
+# File: outliners-settings.js                                                  #
+# Project: Outliners Discord Bot for Anonymice                                 #
+# Author: Doyler (@NftDoyler)                                                  #
+# Original Author(s): Oliver Renner (@_orenner) & slingn.eth (@slingncrypto)   #
 # © 2021                                                                       #
 ###############################################################################*/
 
@@ -11,39 +12,16 @@ const AnonymiceBreedingABI = require("../contracts/baby_mice_abi.json");
 
 const settings = {
   rules: [
-    //example of a generic/standard verification rule
-    //checks whether the signers wallet holds at least 1 
-    //token from the specified contract
-    // {
-    //   name: "Baby Mice",
-    //   roleId: "918771367074201631",
-    //   executor: {
-    //     type: "GenericContractVerificationRule.js",
-    //     config: {
-    //       contractAddress: "0x15cc16bfe6fac624247490aa29b6d632be549f00",
-    //       contractAbi: AnonymiceBreedingABI,
-    //       method: "balanceOf",
-    //     },
-    //   },
-    // },
-    // completely customized verification rule
     {
-      name: "Anonymice Verifier",
+      name: "Outliners Verifier for Anonymice",
       executor: {
-        type: "AnonymiceVerificationRule.js",
+        type: "OutlinersVerificationRule.js",
         config: {
           roles: [
             {
-              name: "Genesis Mice",
-              id: "918771246651572266"
-            },
-            {
-              name: "Baby Mice",
-              id: "918771367074201631"
-            },
-            {
-              name: "Alpha Mice",
-              id: "917141311100964915"
+              // Make sure that these values are correct
+              name: "Outliners OG",
+              id: "950143332942774302"
             }
           ],
           AnonymiceContract: {
