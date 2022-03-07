@@ -16,7 +16,7 @@ dotenv.config();
 
 const application = {
     name: process.env.APPLICATION_NAME,
-    port: process.env.APPLICATION_SERVER_PORT,
+    port: process.env.NODE_ENV === "production" ? process.env.APPLICATION_SERVER_PUBLIC_PORT : process.env.APPLICATION_SERVER_PORT,
     server: {
         scheme: process.env.APPLICATION_SERVER_SCHEME,
         host: process.env.APPLICATION_SERVER_HOST,
