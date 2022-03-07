@@ -40,17 +40,16 @@ function displayAddress(address, cb) {
 const init = async () => {
   window.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   window.provider.on("network", (newNetwork, oldNetwork) => {
-    if(oldNetwork) {
+    if (oldNetwork) {
       window.location.reload();
     }
   });
   ethereum.on('accountsChanged', function (accounts) {
-    if(accounts && accounts.length > 0) {
-      if(window.account != accounts[0]) {
+    if (accounts && accounts.length > 0) {
+      if (window.account != accounts[0]) {
         window.location.reload();
       }
     }
-    
   });
 
   window.signer = provider.getSigner();
@@ -106,7 +105,6 @@ const signMessage = async () => {
   let data = ethers.utils.toUtf8Bytes(jsonMessage);
   let signature = await provider.send('personal_sign', [ethers.utils.hexlify(data), window.account.toLowerCase()])
   //let signature = await provider.getSigner().signMessage(jsonMessage);
-  
 
   $(".memes").removeClass("hidden");
   message.signature = signature;
@@ -135,22 +133,24 @@ const signMessage = async () => {
         .filter((s) => s.qualified === true);
 
       var roleAvailable = data.status
-      .filter((s) => s.roleAvailable === true);
+        .filter((s) => s.roleAvailable === true);
 
       var roles = data.status
+        .filter((s) => s.qualified === true)
+        .filter((s) => s.roleAvailable === true)
         .map((s) => s.role)
         .join(", ");
-      if (roleQualified && roleAvailable) {
+
+      if ((roleQualified.length > 0) && (roleAvailable.length > 0)) {
         $(".success-bad").addClass("hidden");
         $(".roles").text(roles);
-      } else if (!roleQualified) {
+      } else if (roleQualified && !roleQualified.length) {
         $(".success-good").addClass("hidden");
         $(".roles").text("No mice detected. Please verify again with a different wallet!");
-      } else if (!roleAvailable) {
+      } else if (roleAvailable && !roleAvailable.length) {
         $(".success-good").addClass("hidden");
         $(".roles").text("Sorry, there are no roles left to claim.");
-      } else
-      {
+      } else {
         $(".success-good").addClass("hidden");
         $(".roles").text("UNKNOWN ERROR. Please reach out to a team member for more information.");
       }
