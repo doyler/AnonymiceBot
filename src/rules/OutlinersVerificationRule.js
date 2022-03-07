@@ -152,7 +152,7 @@ class OutlinersVerificationRule {
     }
 
     async getGenesisMice(config, user, provider) {
-        let logMessage = `Anonymice Verification Rule is executing - Get Genesis Mice:
+        let logMessage = `Onliners Verification Rule is executing - Get Genesis Mice:
 Contract:       ${config.Address}
 Argument(s):    ${user.walletAddress}`;
 
@@ -175,7 +175,7 @@ Result:       ${result}`;
     }
 
     async getBabyMice(config, user, provider) {
-        let logMessage = `Anonymice Verification Rule is executing - Get Baby Mice:
+        let logMessage = `Onliners Verification Rule is executing - Get Baby Mice:
 Contract:       ${config.Address}
 Argument(s):    ${user.walletAddress}`;
 
@@ -198,7 +198,7 @@ Result:       ${result}`;
     }
 
     async getCheethGrindingMice(config, user, provider) {
-        let logMessage = `Anonymice Verification Rule is executing - Get Cheeth Grinding Mice:
+        let logMessage = `Onliners Verification Rule is executing - Get Cheeth Grinding Mice:
 Contract:       ${config.Address}
 Argument(s):    ${user.walletAddress}`;
 
@@ -220,7 +220,7 @@ Result:       ${result}`;
     }
 
     async getBreedingMice(config, user, provider) {
-        let logMessage = `Anonymice Verification Rule is executing - Get Breeding Mice:
+        let logMessage = `Onliners Verification Rule is executing - Get Breeding Mice:
 Contract:       ${config.Address}
 Argument(s):    ${user.walletAddress}`;
 
