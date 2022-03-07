@@ -37,8 +37,6 @@ class OutlinersVerificationRule {
 
         let discordRoles = await this.getDiscordRoles(this.config.roles);
 
-        // There is only one role, but doing the checks separately
-        // Prevents weird failure cases in one contract from breaking everything
         let qualifiesForAnonymiceRole = false;
 
         let anonymiceRoleConfig = this.config.roles.find(
@@ -51,12 +49,12 @@ class OutlinersVerificationRule {
         let roleCount = await this.getRoleCount(anonymiceRole.id);
         let roleAvail = (roleCount < this.maxCount);
 
-        //execute - Genesis Mice
         try {
             qualifiesForAnonymiceRole =
                 result.mice.length > 0 ||
                 result.cheethGrinding.length > 0 ||
-                result.breeding.length > 0;
+                result.breeding.length > 0 ||
+                result.babies.length > 0;
             await this.manageRoles(discordUser, anonymiceRole, qualifiesForAnonymiceRole, roleAvail);
             executionResults.push({
                 role: "Outliners OG",
@@ -67,23 +65,8 @@ class OutlinersVerificationRule {
                     mice: result.mice,
                     staking: result.cheethGrinding,
                     breeding: result.breeding,
+                    babies: result.babies,
                 },
-            });
-        } catch (err) {
-            logger.error(err.message);
-            logger.error(err.stack);
-        }
-
-        //execute - Baby Mice
-        try {
-            qualifiesForAnonymiceRole = result.babies.length > 0;
-            await this.manageRoles(discordUser, anonymiceRole, qualifiesForAnonymiceRole, roleAvail);
-            executionResults.push({
-                role: "Outliners OG",
-                roleId: anonymiceRole.id,
-                qualified: qualifiesForAnonymiceRole,
-                roleAvailable: roleAvail,
-                result: result.babies,
             });
         } catch (err) {
             logger.error(err.message);
