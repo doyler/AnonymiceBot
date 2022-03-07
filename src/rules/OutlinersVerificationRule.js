@@ -16,7 +16,7 @@ class OutlinersVerificationRule {
         this.logger = require("../utils/logger");
         
         // The max number of users that can have the role
-        this.maxCount = 0;
+        this.maxCount = 333;
     }
 
     /**
