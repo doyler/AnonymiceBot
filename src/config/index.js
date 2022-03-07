@@ -45,7 +45,7 @@ const sync = {
 }
 
 const mongodb = {
-    url: `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DBNAME}${process.env.MONGODB_OPTIONS}`
+    url: `mongodb://${process.env.MONGODB_USERNAME}:${encodeURIComponent(process.env.MONGODB_PASSWORD)}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DBNAME}${process.env.MONGODB_OPTIONS}`
 }
 
 const mongoose = {
