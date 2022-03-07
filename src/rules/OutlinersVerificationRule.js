@@ -34,9 +34,8 @@ class OutlinersVerificationRule {
 
         let discordRoles = await this.getDiscordRoles(this.config.roles);
 
-        //wrapping each role we are executing on in its own try/catch
-        //if any one fails, others will still be processed
-
+        // There is only one role, but doing the checks separately
+        // Prevents weird failure cases in one contract from breaking everything
         let qualifiesForAnonymiceRole = false;
 
         let anonymiceRoleConfig = this.config.roles.find(
@@ -45,6 +44,9 @@ class OutlinersVerificationRule {
         let anonymiceRole = discordRoles.find(
             (r) => r.id === anonymiceRoleConfig.id
         );
+
+        let roleCount = await this.getRoleCount(anonymiceRole.id);
+
 
         //execute - Genesis Mice
         try {
@@ -116,6 +118,14 @@ class OutlinersVerificationRule {
             breeding: breedingMiceResult,
         };
         return result;
+    }
+
+    async getRoleCount(roleID) {
+        let guild = discordBot.getGuild();
+        let members = await guild.members.fetch();
+        let memberCount = await guild.roles.cache.get(roleID).members.size;
+
+        return memberCount;
     }
 
     async getDiscordRoles(rolesConfig) {
