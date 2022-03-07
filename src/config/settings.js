@@ -21,7 +21,7 @@ const settings = {
             {
               // Make sure that these values are correct
               name: "Outliners OG",
-              id: "950143332942774302"
+              id: "950273459013955614"
             }
           ],
           AnonymiceContract: {
