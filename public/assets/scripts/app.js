@@ -131,16 +131,28 @@ const signMessage = async () => {
         return;
       }
 
+      var roleQualified = data.status
+        .filter((s) => s.qualified === true);
+
+      var roleAvailable = data.status
+      .filter((s) => s.roleAvailable === true);
+
       var roles = data.status
-        .filter((s) => s.qualified === true)
         .map((s) => s.role)
         .join(", ");
-      if (roles) {
+      if (roleQualified && roleAvailable) {
         $(".success-bad").addClass("hidden");
         $(".roles").text(roles);
-      } else {
+      } else if (!roleQualified) {
         $(".success-good").addClass("hidden");
-        $(".roles").text("None. Please verify again with a different wallet.");
+        $(".roles").text("No mice detected. Please verify again with a different wallet!");
+      } else if (!roleAvailable) {
+        $(".success-good").addClass("hidden");
+        $(".roles").text("Sorry, there are no roles left to claim.");
+      } else
+      {
+        $(".success-good").addClass("hidden");
+        $(".roles").text("UNKNOWN ERROR. Please reach out to a team member for more information.");
       }
       $(".verify").addClass("hidden");
       $(".meme-message").addClass("hidden");

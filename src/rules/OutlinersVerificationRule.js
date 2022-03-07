@@ -14,6 +14,9 @@ class OutlinersVerificationRule {
     constructor(config) {
         this.config = config;
         this.logger = require("../utils/logger");
+        
+        // The max number of users that can have the role
+        this.maxCount = 0;
     }
 
     /**
@@ -46,7 +49,7 @@ class OutlinersVerificationRule {
         );
 
         let roleCount = await this.getRoleCount(anonymiceRole.id);
-
+        let roleAvail = (roleCount < this.maxCount);
 
         //execute - Genesis Mice
         try {
@@ -54,11 +57,12 @@ class OutlinersVerificationRule {
                 result.mice.length > 0 ||
                 result.cheethGrinding.length > 0 ||
                 result.breeding.length > 0;
-            await this.manageRoles(discordUser, anonymiceRole, qualifiesForAnonymiceRole);
+            await this.manageRoles(discordUser, anonymiceRole, qualifiesForAnonymiceRole, roleAvail);
             executionResults.push({
                 role: "Outliners OG",
                 roleId: anonymiceRole.id,
                 qualified: qualifiesForAnonymiceRole,
+                roleAvailable: roleAvail,
                 result: {
                     mice: result.mice,
                     staking: result.cheethGrinding,
@@ -73,11 +77,12 @@ class OutlinersVerificationRule {
         //execute - Baby Mice
         try {
             qualifiesForAnonymiceRole = result.babies.length > 0;
-            await this.manageRoles(discordUser, anonymiceRole, qualifiesForAnonymiceRole);
+            await this.manageRoles(discordUser, anonymiceRole, qualifiesForAnonymiceRole, roleAvail);
             executionResults.push({
                 role: "Outliners OG",
                 roleId: anonymiceRole.id,
                 qualified: qualifiesForAnonymiceRole,
+                roleAvailable: roleAvail,
                 result: result.babies,
             });
         } catch (err) {
@@ -251,7 +256,7 @@ Result:       ${results}`;
 
     //todo: cleanup return values arent consumed
 
-    async manageRoles(discordUser, role, qualifies) {
+    async manageRoles(discordUser, role, qualifies, roleAvail) {
         if (!role) {
             logger.error(
                 `Could not locate the ${roleName} discord role using id ${roleId} specified. Please confirm your configuration.`
@@ -261,11 +266,16 @@ Result:       ${results}`;
 
         try {
             if (qualifies) {
-                if (!discordUser.roles.cache.has(role.id)) {
-                    logger.info(`Assigning Role: ${role.name}`);
-                    await discordUser.roles.add(role);
+                if (roleAvail) {
+                    if (!discordUser.roles.cache.has(role.id)) {
+                        logger.info(`Assigning Role: ${role.name}`);
+                        await discordUser.roles.add(role);
+                    }
+                    return true;
                 }
-                return true;
+                else {
+                    logger.error(`There are already ${this.maxCount} users with the ${role.name} role.`);
+                }
             } else {
                 if (discordUser.roles.cache.has(role.id)) {
                     logger.info(`Removing Role: ${role.name}`);
