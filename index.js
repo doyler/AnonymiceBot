@@ -19,7 +19,8 @@
 /*##############################################################################
 # File: index.js                                                               #
 # Project: Anonymice - Discord Bot                                             #
-# Author(s): Oliver Renner (@_orenner) & slingn.eth (@slingncrypto)            #
+# Author/Updater: Doyler (@NftDoyler)                                          #
+# Original Author(s): Oliver Renner (@_orenner) & slingn.eth (@slingncrypto)   #
 # © 2021                                                                       #
 ###############################################################################*/
 
@@ -31,6 +32,32 @@ const app = require("./src/app");
 const DiscordBot = require("./src/discordBot");
 const Synchronizer = require("./src/synchronizer");
 
+const dotenv = require("dotenv");
+const path = require("path");
+
+dotenv.config({
+    path: path.join(__dirname, '../../.env')
+});
+
+/*##############################################################################
+express SSL support - https://expressjs.com/en/api.html
+##############################################################################*/
+
+// Default to HTTP in case something weird happens
+const http = require('http');
+let webServer = http.createServer(app);
+
+// https://dev.to/omergulen/step-by-step-node-express-ssl-certificate-run-https-server-from-scratch-in-5-steps-5b87
+if (process.env.APPLICATION_SERVER_PUBLIC_SCHEME === "https") {
+  const https = require('https');
+  const fs = require('fs');
+
+  webServer = https.createServer({
+    key: fs.readFileSync(process.env.SSL_PRIVATE_KEY),
+    cert: fs.readFileSync(process.env.SSL_PUBLIC_CERT),
+  }, app);
+}
+
 logger.info(banner);
 
 logger.info(`Starting ${config.application.name}...`)
@@ -41,7 +68,7 @@ mongoose.connect(config.mongodb.url, config.mongoose.options)
   logger.info("Connected to MongoDB");
 
   //start the web server
-  server = await app.listen(config.application.port, () => {
+  server = await webServer.listen(config.application.port, () => {
     logger.info(
       `${config.application.name} is running at port ${config.application.port}`
     );
