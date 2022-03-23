@@ -8,6 +8,7 @@
 
 const AnonymiceABI = require("../contracts/mice_abi.json");
 const CheethABI = require("../contracts/cheeth_abi.json");
+const CheethV2ABI = require("../contracts/cheethv2_abi.json");
 const AnonymiceBreedingABI = require("../contracts/baby_mice_abi.json");
 
 const settings = {
@@ -31,6 +32,10 @@ const settings = {
           CheethContract: {
             Address: "0x5f7BA84c7984Aa5ef329B66E313498F0aEd6d23A",
             ABI: CheethABI,
+          },
+          CheethV2Contract: {
+            Address: "0x54C4419b7be48889097a70Ef6Bdc47feAC54AEF5",
+            ABI: CheethV2ABI,
           },
           AnonymiceBreedingContract: {
             Address: "0x15cc16bfe6fac624247490aa29b6d632be549f00",

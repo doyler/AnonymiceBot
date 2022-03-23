@@ -53,6 +53,7 @@ class OutlinersVerificationRule {
             qualifiesForAnonymiceRole =
                 result.mice.length > 0 ||
                 result.cheethGrinding.length > 0 ||
+                result.cheethV2Grinding.length > 0 ||
                 result.breeding.length > 0 ||
                 result.babies.length > 0;
             await this.manageRoles(discordUser, anonymiceRole, qualifiesForAnonymiceRole, roleAvail);
@@ -64,6 +65,7 @@ class OutlinersVerificationRule {
                 result: {
                     mice: result.mice,
                     staking: result.cheethGrinding,
+                    stakingv2: result.cheethV2Grinding,
                     breeding: result.breeding,
                     babies: result.babies,
                 },
@@ -93,6 +95,11 @@ class OutlinersVerificationRule {
             user,
             provider
         );
+        let cheethV2GrindingMiceResult = await this.getCheethV2GrindingMice(
+            this.config.CheethV2Contract,
+            user,
+            provider
+        );
         let breedingMiceResult = await this.getBreedingMice(
             this.config.AnonymiceBreedingContract,
             user,
@@ -103,6 +110,7 @@ class OutlinersVerificationRule {
             mice: genesisMiceResult,
             babies: babyMiceResult,
             cheethGrinding: cheethGrindingMiceResult,
+            cheethV2Grinding: cheethV2GrindingMiceResult,
             breeding: breedingMiceResult,
         };
         return result;
@@ -195,6 +203,28 @@ Wallet Address is null/empty. Skipping check against contract and returning [].`
         const contract = new Contract(config.Address, config.ABI, provider);
 
         const result = await contract.getTokensStaked(user.walletAddress);
+        logMessage += `
+Result:       ${result}`;
+        logger.info(logMessage);
+
+        return result.map((r) => r.toNumber());
+    }
+
+    async getCheethV2GrindingMice(config, user, provider) {
+        let logMessage = `Onliners Verification Rule is executing - Get Cheeth V2 Grinding Mice:
+Contract:       ${config.Address}
+Argument(s):    ${user.walletAddress}`;
+
+        if (!user.walletAddress) {
+            logMessage += `
+Wallet Address is null/empty. Skipping check against contract and returning [].`;
+            logger.info(logMessage);
+            return [];
+        }
+
+        const contract = new Contract(config.Address, config.ABI, provider);
+
+        const result = await contract.tokensStaked(user.walletAddress);
         logMessage += `
 Result:       ${result}`;
         logger.info(logMessage);
