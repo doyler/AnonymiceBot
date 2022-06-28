@@ -81,7 +81,7 @@ const generateMessage = async () => {
     chainId: `${await provider.getNetwork().then(({ chainId }) => chainId)}`,
     uri: document.location.origin,
     version: "1",
-    statement: "Anonymice Discord Bot",
+    statement: "Anonymice3d Discord Bot",
     type: "Personal signature",
     nonce: urlParams.get("requestId"),
   };

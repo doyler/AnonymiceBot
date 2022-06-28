@@ -20,7 +20,7 @@ class StatsController {
     let verificationConfig = settings.rules.find(
       //Forgot about this change as well
       //(r) => r.name === "Anonymice Verifier"
-      (r) => r.name === "Outliners Verifier for Anonymice"
+      (r) => r.name === "Anoymice3d Verifier for Anonymice"
     );
     this.roleConfiguration = verificationConfig.executor.config.roles;
   }

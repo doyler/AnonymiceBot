@@ -4,19 +4,19 @@ const { Contract } = require("ethers");
 const discordBot = require("../discordBot");
 
 /**
- * Outliners OG Verification Rule - checks for any and all mice to give the "Outliners OG" role
+ * Anonymice 3d OG Verification Rule - checks for any and all mice to give the appropriate role
  * based on their holdings.Checks for Mice held in the Users wallet, staked for CHEETH
  * or incubating babies in the breeding process.
  * 
  * Modified by Doyler (@NftDoyler) - 0xeD19c8970c7BE64f5AC3f4beBFDDFd571861c3b7
  */
-class OutlinersVerificationRule {
+class Mice3dVerificationRule {
     constructor(config) {
         this.config = config;
         this.logger = require("../utils/logger");
         
         // The max number of users that can have the role
-        this.maxCount = 333;
+        this.maxCount = 10000;
     }
 
     /**
@@ -37,36 +37,60 @@ class OutlinersVerificationRule {
 
         let discordRoles = await this.getDiscordRoles(this.config.roles);
 
-        let qualifiesForAnonymiceRole = false;
+        let qualifiesForGenesisRole = false;
+        let qualifiesForBabyRole = false;
 
-        let anonymiceRoleConfig = this.config.roles.find(
-            (r) => r.name === "Outliners OG"
+        let genesisRoleConfig = this.config.roles.find(
+            (r) => r.name === "genesis mice"
         );
-        let anonymiceRole = discordRoles.find(
-            (r) => r.id === anonymiceRoleConfig.id
+        let genesisRole = discordRoles.find(
+            (r) => r.id === genesisRoleConfig.id
         );
 
-        let roleCount = await this.getRoleCount(anonymiceRole.id);
-        let roleAvail = (roleCount < this.maxCount);
+        let babyRoleConfig = this.config.roles.find(
+            (r) => r.name === "baby mice"
+        );
+        let babyRole = discordRoles.find(
+            (r) => r.id === babyRoleConfig.id
+        );
+
+        //let roleCount = await this.getRoleCount(anonymiceRole.id);
+        //let roleAvail = (roleCount < this.maxCount);
+        let roleAvail = true;
 
         try {
-            qualifiesForAnonymiceRole =
+            qualifiesForGenesisRole =
                 result.mice.length > 0 ||
                 result.cheethGrinding.length > 0 ||
                 result.cheethV2Grinding.length > 0 ||
-                result.breeding.length > 0 ||
-                result.babies.length > 0;
-            await this.manageRoles(discordUser, anonymiceRole, qualifiesForAnonymiceRole, roleAvail);
+                result.breeding.length > 0;
+            await this.manageRoles(discordUser, genesisRole, qualifiesForGenesisRole, roleAvail);
             executionResults.push({
-                role: "Outliners OG",
-                roleId: anonymiceRole.id,
-                qualified: qualifiesForAnonymiceRole,
+                role: "genesis mice",
+                roleId: genesisRole.id,
+                qualified: qualifiesForGenesisRole,
                 roleAvailable: roleAvail,
                 result: {
                     mice: result.mice,
                     staking: result.cheethGrinding,
                     stakingv2: result.cheethV2Grinding,
                     breeding: result.breeding,
+                },
+            });
+        } catch (err) {
+            logger.error(err.message);
+            logger.error(err.stack);
+        }
+        try {
+            qualifiesForBabyRole =
+                result.babies.length > 0;
+            await this.manageRoles(discordUser, babyRole, qualifiesForBabyRole, roleAvail);
+            executionResults.push({
+                role: "baby mice",
+                roleId: babyRole.id,
+                qualified: qualifiesForBabyRole,
+                roleAvailable: roleAvail,
+                result: {
                     babies: result.babies,
                 },
             });
@@ -303,4 +327,4 @@ Result:       ${results}`;
     }
 }
 
-module.exports = OutlinersVerificationRule;
+module.exports = Mice3dVerificationRule;

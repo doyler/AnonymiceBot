@@ -1,6 +1,6 @@
 /*##############################################################################
-# File: outliners-settings.js                                                  #
-# Project: Outliners Discord Bot for Anonymice                                 #
+# File: settings.js                                                            #
+# Project: Anonymice3d Discord Bot for Anonymice                               #
 # Author: Doyler (@NftDoyler)                                                  #
 # Original Author(s): Oliver Renner (@_orenner) & slingn.eth (@slingncrypto)   #
 # © 2021                                                                       #
@@ -14,15 +14,20 @@ const AnonymiceBreedingABI = require("../contracts/baby_mice_abi.json");
 const settings = {
   rules: [
     {
-      name: "Outliners Verifier for Anonymice",
+      name: "Anoymice3d Verifier for Anonymice",
       executor: {
-        type: "OutlinersVerificationRule.js",
+        type: "Mice3dVerificationRule.js",
         config: {
           roles: [
             {
               // Make sure that these values are correct
-              name: "Outliners OG",
-              id: "950273459013955614"
+              name: "genesis mice",
+              id: "931687211617902614"
+            },
+            {
+              // Make sure that these values are correct
+              name: "baby mice",
+              id: "931687626547806259"
             }
           ],
           AnonymiceContract: {
